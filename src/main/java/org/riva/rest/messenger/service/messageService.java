@@ -5,9 +5,16 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.Response.StatusType;
 import javax.xml.crypto.Data;
 
 import org.riva.rest.messenger.database.Database;
+import org.riva.rest.messenger.exceptions.DataNotFoundException;
+import org.riva.rest.messenger.model.errorMessage;
 import org.riva.rest.messenger.model.message;
 
 public class messageService {
@@ -41,7 +48,14 @@ public class messageService {
 	}
 	
 	public message getMessage(long id){
-		return messages.get(id);
+		message message = messages.get(id);
+		errorMessage er = new errorMessage("buty",231,"sdgsas");
+		Response res = Response.status(Status.FOUND).entity(er).build();
+		if(message==null){
+			throw new WebApplicationException(res); 
+		}
+		
+		return message;
 	}
 	public message addMessage(message message){
 		message.setId(messages.size()+1);
